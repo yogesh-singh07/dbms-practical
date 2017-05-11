@@ -1,0 +1,143 @@
+mysql> select * from Employee;
++--------+-----------+--------+--------+--------+
+| Emp_id | Name      | Job_id | Salary | Dep_id |
++--------+-----------+--------+--------+--------+
+| 100    | Steven    | ADPRES |  24000 | 90     |
+| 101    | Neena     | ADVP   |  17000 | 90     |
+| 102    | Lex       | ADVP   |  17000 | 90     |
+| 103    | Alexander | ITPROG |   9000 | 60     |
+| 104    | Bruce     | ITPROG |   6000 | 60     |
+| 105    | David     | ITPROG |   4800 | 60     |
+| 106    | Valli     | ITPROG |   4800 | 60     |
+| 107    | Diana     | ITPROG |   4200 | 100    |
+| 108    | Daniel    | ITPROG |   8200 | 60     |
+| 109    | Nancy     | FIMGR  |  12000 | 100    |
+| 110    | John      | FIMGR  |   9000 | 100    |
++--------+-----------+--------+--------+--------+
+11 rows in set (0.01 sec)
+
+mysql> select Job_id,count(Emp_id) from Employee group by Job_id;
++--------+---------------+
+| Job_id | count(Emp_id) |
++--------+---------------+
+| ADPRES |             1 |
+| ADVP   |             2 |
+| FIMGR  |             2 |
+| ITPROG |             6 |
++--------+---------------+
+4 rows in set (0.00 sec)
+
+mysql> select Dep_id,max(Salary),min(Salary) from Employee group by Dep_id;
++--------+-------------+-------------+
+| Dep_id | max(Salary) | min(Salary) |
++--------+-------------+-------------+
+| 100    |       12000 |        4200 |
+| 60     |        9000 |        4800 |
+| 90     |       24000 |       17000 |
++--------+-------------+-------------+
+3 rows in set (0.00 sec)
+
+mysql> select Job_id,count(Job_Id) from Employee group by Job_id having count(Job_id)<3;
++--------+---------------+
+| Job_id | count(Job_Id) |
++--------+---------------+
+| ADPRES |             1 |
+| ADVP   |             2 |
+| FIMGR  |             2 |
++--------+---------------+
+3 rows in set (0.00 sec)
+
+mysql> select Dep_id,avg(Salary) from Employee group by Dep_id having max(Salary)>10000;
++--------+-------------+
+| Dep_id | avg(Salary) |
++--------+-------------+
+| 100    |   8400.0000 |
+| 90     |  19333.3333 |
++--------+-------------+
+2 rows in set (0.00 sec)
+mysql> select * from Employee where Job_id=(select Job_id from Employee where Emp_id='107');
++--------+-----------+--------+--------+--------+
+| Emp_id | Name      | Job_id | Salary | Dep_id |
++--------+-----------+--------+--------+--------+
+| 103    | Alexander | ITPROG |   9000 | 60     |
+| 104    | Bruce     | ITPROG |   6000 | 60     |
+| 105    | David     | ITPROG |   4800 | 60     |
+| 106    | Valli     | ITPROG |   4800 | 60     |
+| 107    | Diana     | ITPROG |   4200 | 100    |
+| 108    | Daniel    | ITPROG |   8200 | 60     |
++--------+-----------+--------+--------+--------+
+6 rows in set (0.00 sec)
+
+mysql> select * from Employee where Job_id=(select Job_id from Employee where Emp_id='107') and Salary>(select Salary from Employee where Emp_id='109');
+Empty set (0.00 sec)
+
+mysql> select * from Employee where Job_id=(select Job_id from Employee where Emp_id='107') and Salary>(select Salary from Employee where Emp_id='105');
++--------+-----------+--------+--------+--------+
+| Emp_id | Name      | Job_id | Salary | Dep_id |
++--------+-----------+--------+--------+--------+
+| 103    | Alexander | ITPROG |   9000 | 60     |
+| 104    | Bruce     | ITPROG |   6000 | 60     |
+| 108    | Daniel    | ITPROG |   8200 | 60     |
++--------+-----------+--------+--------+--------+
+3 rows in set (0.00 sec)
+
+mysql> select * from Employee where Salary=(select min(Salary) from Employee);
++--------+-------+--------+--------+--------+
+| Emp_id | Name  | Job_id | Salary | Dep_id |
++--------+-------+--------+--------+--------+
+| 107    | Diana | ITPROG |   4200 | 100    |
++--------+-------+--------+--------+--------+
+1 row in set (0.00 sec)
+mysql> select Dep_id,min(Salary) from Employee group by Dep_id having min(salary)>(select min(Salary) from Employee where Dep_id='100');
++--------+-------------+
+| Dep_id | min(Salary) |
++--------+-------------+
+| 60     |        4800 |
+| 90     |       17000 |
++--------+-------------+
+2 rows in set (0.00 sec)
+
+mysql> select Name,Salary from Employee where Job_id!='ITPROG' and Salary<Job_id='ITPROG';
++--------+--------+
+| Name   | Salary |
++--------+--------+
+| Steven |  24000 |
+| Neena  |  17000 |
+| Lex    |  17000 |
+| Nancy  |  12000 |
+| John   |   9000 |
++--------+--------+
+5 rows in set, 6 warnings (0.00 sec)
+
+mysql> select * from Employee where Salary=(select min(Salary) from Employee);
++--------+-------+--------+--------+--------+
+| Emp_id | Name  | Job_id | Salary | Dep_id |
++--------+-------+--------+--------+--------+
+| 107    | Diana | ITPROG |   4200 | 100    |
++--------+-------+--------+--------+--------+
+1 row in set (0.00 sec)
+
+mysql> select * from Employee where Salary>9000;
++--------+--------+--------+--------+--------+
+| Emp_id | Name   | Job_id | Salary | Dep_id |
++--------+--------+--------+--------+--------+
+| 100    | Steven | ADPRES |  24000 | 90     |
+| 101    | Neena  | ADVP   |  17000 | 90     |
+| 102    | Lex    | ADVP   |  17000 | 90     |
+| 109    | Nancy  | FIMGR  |  12000 | 100    |
++--------+--------+--------+--------+--------+
+4 rows in set (0.00 sec)
+
+mysql> select * from Employee where Dep_id=(select Dep_id from Employee where Name='David');
++--------+-----------+--------+--------+--------+
+| Emp_id | Name      | Job_id | Salary | Dep_id |
++--------+-----------+--------+--------+--------+
+| 103    | Alexander | ITPROG |   9000 | 60     |
+| 104    | Bruce     | ITPROG |   6000 | 60     |
+| 105    | David     | ITPROG |   4800 | 60     |
+| 106    | Valli     | ITPROG |   4800 | 60     |
+| 108    | Daniel    | ITPROG |   8200 | 60     |
++--------+-----------+--------+--------+--------+
+5 rows in set (0.00 sec)
+
+

@@ -1,0 +1,105 @@
+mysql> update Student set Name='Abhijeet' where Rollno=15;
+Query OK, 1 row affected (0.08 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update Student set City='Meerut' where Rollno=13 or Rollno=14;
+Query OK, 1 row affected (0.06 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> update Student set Age=25 
+    -> where City='Meerut';
+Query OK, 3 rows affected (0.03 sec)
+Rows matched: 3  Changed: 3  Warnings: 0
+
+mysql> alter table Student
+    -> add Balance integer(6);
+Query OK, 0 rows affected (0.42 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> update Student set Balance=20000;
+Query OK, 15 rows affected (0.03 sec)
+Rows matched: 15  Changed: 15  Warnings: 0
+
+mysql> update Student set Balance=Balance+500
+    -> where City='Mumbai' or City='Delhi';
+Query OK, 4 rows affected (0.02 sec)
+Rows matched: 4  Changed: 4  Warnings: 0
+
+mysql> select sum(Balance) from Student;
++--------------+
+| sum(Balance) |
++--------------+
+|       302000 |
++--------------+
+1 row in set (0.00 sec)
+
+mysql> select * from Student where Balance=(select max(Balance) from Student);
++--------+-------+--------+---------+------+---------+
+| Rollno | Name  | City   | Pincode | Age  | Balance |
++--------+-------+--------+---------+------+---------+
+|      2 | Kumar | Mumbai |  122345 |   28 |   20500 |
+|      5 | Rohit | Delhi  |  134679 |   22 |   20500 |
+|      8 | Kamal | Mumbai |  218974 |   25 |   20500 |
+|      9 | Mohit | Mumbai |  340934 |   20 |   20500 |
++--------+-------+--------+---------+------+---------+
+4 rows in set (0.00 sec)
+
+mysql> create table Student2 as (select * from Student);
+Query OK, 15 rows affected (0.27 sec)
+Records: 15  Duplicates: 0  Warnings: 0
+
+mysql> desc Student2;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| Rollno  | int(6)      | YES  |     | NULL    |       |
+| Name    | varchar(15) | YES  |     | NULL    |       |
+| City    | varchar(10) | YES  |     | NULL    |       |
+| Pincode | int(8)      | YES  |     | NULL    |       |
+| Age     | int(8)      | YES  |     | NULL    |       |
+| Balance | int(6)      | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql> delete from Student2 where Age>=25;
+Query OK, 10 rows affected (0.04 sec)
+
+mysql> rename table Student2 to NewStudentRecord;
+Query OK, 0 rows affected (0.09 sec)
+
+mysql> select * from NewStudentRecord;
++--------+---------+----------+---------+------+---------+
+| Rollno | Name    | City     | Pincode | Age  | Balance |
++--------+---------+----------+---------+------+---------+
+|      3 | Puneet  | Chennai  |  456782 |   19 |   20000 |
+|      4 | Kshitij | Calcutta |  768934 |   21 |   20000 |
+|      5 | Rohit   | Delhi    |  134679 |   22 |   20500 |
+|      9 | Mohit   | Mumbai   |  340934 |   20 |   20500 |
+|     12 | Gaurav  | Rampur   |  312145 | NULL |   20000 |
++--------+---------+----------+---------+------+---------+
+5 rows in set (0.00 sec)
+
+mysql> select * from Student where length(Name)=6;
++--------+--------+----------+---------+------+---------+
+| Rollno | Name   | City     | Pincode | Age  | Balance |
++--------+--------+----------+---------+------+---------+
+|      3 | Puneet | Chennai  |  456782 |   19 |   20000 |
+|      7 | Shweta | Dehradun |  234455 |   26 |   20000 |
+|     10 | Pankaj | Gwaliar  |  123467 |   27 |   20000 |
+|     12 | Gaurav | Rampur   |  312145 | NULL |   20000 |
+|     13 | Manish | Meerut   |  324566 |   25 |   20000 |
+|     14 | Aviral | Meerut   |  673124 |   25 |   20000 |
++--------+--------+----------+---------+------+---------+
+6 rows in set (0.00 sec)
+
+mysql> select Name from Student where Name like '__m%';
++-------+
+| Name  |
++-------+
+| Kumar |
+| Kamal |
++-------+
+2 rows in set (0.00 sec)
+
+
+

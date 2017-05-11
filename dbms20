@@ -1,0 +1,30 @@
+mysql> select * from Emp_phone;
++----------+----------+----------+
+| Emp_code | Location | Phone_no |
++----------+----------+----------+
+|        1 | Office   |   217313 |
+|        2 | Home     |  3124127 |
+|        3 | Home     |   218189 |
++----------+----------+----------+
+3 rows in set (0.00 sec)
+
+mysql> select Employee.Emp_code,Employee.Name,Employee.City,Employee.Salary,Employee.Manager,Emp_phone.Phone_no from Employee left join Emp_phone on Emp_phone.Emp_code=Employee.Emp_code;
++----------+-------+----------+--------+---------+----------+
+| Emp_code | Name  | City     | Salary | Manager | Phone_no |
++----------+-------+----------+--------+---------+----------+
+|        1 | Amit  | Delhi    |  26000 |       1 |   217313 |
+|        2 | kumar | Bombay   |  18000 |       1 |  3124127 |
+|        3 | Naman | Calcutta |  20000 |       2 |   218189 |
+|        4 | Karan | Gwaliar  |  19000 |       2 |     NULL |
++----------+-------+----------+--------+---------+----------+
+4 rows in set (0.00 sec)
+
+mysql> select * FROM (SELECt a.Emp_code,a.Name,a.City,a.Salary,a.Manager,b.Phone_no from Employee a left join Emp_phone b on a.Emp_code=b.Emp_code) AS yogesh WHERE Phone_no IS null;
++----------+-------+---------+--------+---------+----------+
+| Emp_code | Name  | City    | Salary | Manager | Phone_no |
++----------+-------+---------+--------+---------+----------+
+|        4 | Karan | Gwaliar |  19000 |       2 |     NULL |
++----------+-------+---------+--------+---------+----------+
+1 row in set (0.00 sec)
+
+
